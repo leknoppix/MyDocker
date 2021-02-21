@@ -1,0 +1,105 @@
+swagger: '2.0'
+info:
+  version: '1.1.0'
+  title: PDF Service
+  description: A PDF Serice API that renders HTML templates to PDF
+  contact:
+    name: Fabian Beuke
+    email: beuke@traum-ferienwohnungen.de
+  license:
+    name: BSD-3-Clause
+    url: https://opensource.org/licenses/BSD-3-Clause
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+paths:
+
+  /:
+    get:
+      description: Returns this auto generated documentation
+      operationId: getStatus
+      produces:
+        - text/html
+      responses:
+        '200':
+          description: Service is up an running
+    post:
+      description: Creates a new PDF
+      operationId: getPDF
+      produces:
+        - application/pdf
+      parameters:
+        - name: pdf
+          in: body
+          description: HTML to convert to PDF
+          required: true
+          schema:
+            $ref: '#/definitions/pdf'
+      responses:
+        '200':
+          description: OK PDF response
+        '400':
+          description: BAD_REQUEST invalid arguments
+        '401':
+          description: UNAUTHORIZED on invalid basic auth
+
+  /status:
+    get:
+      description: Returns status page with CPU, Mem, AVG Load, Response Time and Requests per Seconds
+      operationId: getStatusMonitor
+      produces:
+        - text/html
+      responses:
+        '200':
+          description: Service is up an running
+        '401':
+          description: UNAUTHORIZED on invalid basic auth
+      security:
+        - basicAuth: []
+
+  /metrics:
+    get:
+      description: Returns a set of default prometheus metrics such as http_request_duration_seconds_bucket
+      operationId: getPrometheusMetrics
+      produces:
+        - text/html
+      responses:
+        '200':
+          description: Service is up an running
+        '401':
+          description: UNAUTHORIZED on invalid basic auth
+      security:
+        - basicAuth: []
+
+  /healthcheck:
+    get:
+      description: Returns health status of the service
+      operationId: getHealth
+      produces:
+        - text/html
+      responses:
+        '200':
+          description: Returns OK and uptime in seconds if service is running
+
+securityDefinitions:
+  basicAuth:
+    type: basic
+    description: Basic authentication
+
+definitions:
+  pdf:
+    type: object
+    required:
+      - html
+    properties:
+      html:
+        type: string
+        format: byte # base64
+        description: Service is up an running
+      footer:
+        type: string
+        format: byte # base64
+      options:
+        type: string
