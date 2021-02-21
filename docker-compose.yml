@@ -68,7 +68,6 @@ services:
 
   maildev:
     image: djfarrelly/maildev
-    container_name: JDG32_maildev
     ports:
       - "1026:25"
       - "1081:80"
@@ -91,14 +90,14 @@ services:
   nodejs:
     build:
       context: .
-      dockerfile: ./private/docker/config/nodejs/Dockerfile
+      dockerfile: ./docker/config/nodejs/Dockerfile
     volumes:
       - ./apps:/var/www
   
   wkhtmltopdf:
     build:
       context: .
-      dockerfile: ./private/wkhtmltopdf/Dockerfile
+      dockerfile: ./wkhtmltopdf/Dockerfile
     ports:
       - 5555:5555
     networks:
