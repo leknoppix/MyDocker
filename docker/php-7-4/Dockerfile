@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
                                 libpq-dev \
                                 locales
 
-COPY private/docker/config/php-7-4/config/locale.gen /etc/locale.gen
+RUN sed -i "s/^#en_US.UTF-8/en_US.UTF-8/" /etc/locale.gen && sed -i "s/^#fr_FR.UTF-8/fr_FR.UTF-8/" /etc/locale.gen
 RUN locale-gen
 RUN docker-php-ext-install bcmath
 RUN docker-php-ext-install bz2
@@ -74,7 +74,7 @@ RUN pecl install redis-5.1.1 \
 # Use the default production configuration
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-COPY private/docker/config/php-7-4/config/php.ini /usr/local/etc/php/phpcustom.ini
+COPY docker/php-7-4/config/php.ini /usr/local/etc/php/phpcustom.ini
 
 WORKDIR /var/www/
 

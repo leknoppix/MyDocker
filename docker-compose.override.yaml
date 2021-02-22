@@ -1,0 +1,60 @@
+# Docker composer version
+version: '3'
+
+networks:
+  laravel:
+    name: laravel_dev
+
+services: 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "9092:80"
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: ${DOCKER_ROOT_PASSWORD}
+    networks:
+      - laravel
+
+  nginx:
+    depends_on:
+      - maildev
+    networks: 
+      - laravel
+
+  php:
+    depends_on:
+      - maildev
+    networks: 
+      - laravel
+  
+  #adminer:
+  #  image: adminer
+  #  environment:
+  #    APP_ENV: dev
+  #    ADMINER_DESIGN: pepa-linha
+  #    ADMINER_DEFAULT_SERVER: mysql
+  #  depends_on:
+  #    - mysql
+  #  ports:
+  #    - 8888:8080
+  #  networks:
+  #    - laravel
+
+  maildev:
+    image: djfarrelly/maildev
+    ports:
+      - "1081:80"
+    networks:
+      - laravel
+
+  #wkhtmltopdf:
+  #  build:
+  #    context: .
+  #    dockerfile: ./wkhtmltopdf/Dockerfile
+  #  ports:
+  #    - 5555:5555
+  #  networks:
+  #    - laravel
