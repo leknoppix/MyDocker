@@ -46,7 +46,7 @@ services:
   maildev:
     image: djfarrelly/maildev
     ports:
-      - "1081:80"
+      - "1080:80"
     networks:
       - laravel
 
