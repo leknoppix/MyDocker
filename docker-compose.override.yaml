@@ -3,7 +3,7 @@ version: '3'
 
 networks:
   laravel:
-    name: laravel_dev
+    name: ${FRAMEWORK}_dev
 
 services: 
   phpmyadmin:
@@ -16,19 +16,19 @@ services:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: ${DOCKER_ROOT_PASSWORD}
     networks:
-      - laravel
+      - ${FRAMEWORK}
 
   nginx:
     depends_on:
       - maildev
     networks: 
-      - laravel
+      - ${FRAMEWORK}
 
   php:
     depends_on:
       - maildev
     networks: 
-      - laravel
+      - ${FRAMEWORK}
   
   #adminer:
   #  image: adminer
@@ -41,14 +41,14 @@ services:
   #  ports:
   #    - 8888:8080
   #  networks:
-  #    - laravel
+  #    - ${FRAMEWORK}
 
   maildev:
     image: djfarrelly/maildev
     ports:
       - "1080:80"
     networks:
-      - laravel
+      - ${FRAMEWORK}
 
   #wkhtmltopdf:
   #  build:
@@ -57,4 +57,4 @@ services:
   #  ports:
   #    - 5555:5555
   #  networks:
-  #    - laravel
+  #    - ${FRAMEWORK}

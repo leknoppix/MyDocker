@@ -4,7 +4,7 @@ version: '3'
 # Define network name
 networks:
   laravel:
-    name: laravel_prod
+    name: ${FRAMEWORK}_prod
 
 services:
   nginx:
@@ -19,7 +19,7 @@ services:
       - php
       - mysql
     networks:
-      - laravel
+      - ${FRAMEWORK}
 
   mysql:
     image: mariadb:10.5.4-focal #mysql:5.6 mariadb:10.5.4-focal
@@ -34,7 +34,7 @@ services:
       MYSQL_PASSWORD: ${DOCKER_PASSWORD}
       MYSQL_ROOT_PASSWORD : ${DOCKER_ROOT_PASSWORD}
     networks:
-      - laravel
+      - ${FRAMEWORK}
 
   php:
     build:
@@ -46,7 +46,7 @@ services:
     ports:
       - "9000:9000"
     networks:
-      - laravel
+      - ${FRAMEWORK}
     depends_on:
       - mysql
 
@@ -57,4 +57,4 @@ services:
     volumes:
       - ./apps:/var/www
     networks:
-      - laravel
+      - ${FRAMEWORK}
