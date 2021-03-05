@@ -46,15 +46,22 @@ services:
   maildev:
     image: djfarrelly/maildev
     ports:
-      - "1080:80"
+      - "1081:80"
     networks:
       - ${FRAMEWORK}
 
   #wkhtmltopdf:
   #  build:
   #    context: .
-  #    dockerfile: ./wkhtmltopdf/Dockerfile
+  #    dockerfile: ./docker/wkhtmltopdf/Dockerfile
   #  ports:
   #    - 5555:5555
   #  networks:
   #    - ${FRAMEWORK}
+
+  flutter:
+    build:
+      context: .
+      dockerfile: ./docker/flutter/Dockerfile
+    volumes: 
+      - ./apps_mobile:/home/developer/workspace
