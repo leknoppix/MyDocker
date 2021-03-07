@@ -4,7 +4,6 @@ version: '3'
 # Define network name
 networks:
   laravel:
-    name: ${FRAMEWORK}_prod
 
 services:
   nginx:
@@ -17,14 +16,15 @@ services:
       - ./docker/nginx/${FRAMEWORK}.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php
-      - mysql
     networks:
-      - ${FRAMEWORK}
+      - laravel
 
   mysql:
     image: mariadb:10.5.4-focal #mysql:5.6 mariadb:10.5.4-focal
     restart: unless-stopped
     tty: true
+    ports:
+      - 3306:3306
     volumes:
       - ./docker/data:/var/lib/mysql
       - ./docker/mysql/sql:/var/tmp #importer par mysql -uroot -p 
@@ -34,19 +34,20 @@ services:
       MYSQL_PASSWORD: ${DOCKER_PASSWORD}
       MYSQL_ROOT_PASSWORD : ${DOCKER_ROOT_PASSWORD}
     networks:
-      - ${FRAMEWORK}
+      - laravel
 
   php:
     build:
       context: .
       dockerfile: docker/php-7-4/Dockerfile
-    user: 1000:985
+      args:
+        - DOCKER_USER=${DOCKER_USER}
     volumes:
       - ./apps:/var/www
     ports:
       - "9000:9000"
     networks:
-      - ${FRAMEWORK}
+      - laravel
     depends_on:
       - mysql
 
@@ -57,4 +58,4 @@ services:
     volumes:
       - ./apps:/var/www
     networks:
-      - ${FRAMEWORK}
+      - laravel

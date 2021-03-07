@@ -3,7 +3,6 @@ version: '3'
 
 networks:
   laravel:
-    name: ${FRAMEWORK}_dev
 
 services: 
   phpmyadmin:
@@ -16,19 +15,7 @@ services:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: ${DOCKER_ROOT_PASSWORD}
     networks:
-      - ${FRAMEWORK}
-
-  nginx:
-    depends_on:
-      - maildev
-    networks: 
-      - ${FRAMEWORK}
-
-  php:
-    depends_on:
-      - maildev
-    networks: 
-      - ${FRAMEWORK}
+      - laravel
   
   #adminer:
   #  image: adminer
@@ -41,14 +28,14 @@ services:
   #  ports:
   #    - 8888:8080
   #  networks:
-  #    - ${FRAMEWORK}
+  #    - laravel
 
   maildev:
     image: djfarrelly/maildev
     ports:
       - "1081:80"
     networks:
-      - ${FRAMEWORK}
+      - laravel
 
   #wkhtmltopdf:
   #  build:
@@ -59,9 +46,9 @@ services:
   #  networks:
   #    - ${FRAMEWORK}
 
-  flutter:
-    build:
-      context: .
-      dockerfile: ./docker/flutter/Dockerfile
-    volumes: 
-      - ./apps_mobile:/home/developer/workspace
+  #flutter:
+  #  build:
+  #    context: .
+  #    dockerfile: ./docker/flutter/Dockerfile
+  #  volumes: 
+  #    - ./apps_mobile:/home/developer/workspace

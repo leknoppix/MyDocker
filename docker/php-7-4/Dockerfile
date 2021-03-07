@@ -1,4 +1,8 @@
 FROM php:7.4-fpm
+ARG DOCKER_USER
+RUN adduser --disabled-password ${DOCKER_USER}
+RUN adduser ${DOCKER_USER} sudo
+RUN echo "${DOCKER_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN apt-get update && apt-get install -y \
                                 apt-utils \
                                 libbz2-dev \
@@ -73,9 +77,12 @@ RUN pecl install redis-5.1.1 \
     && docker-php-ext-enable redis xdebug
 # Use the default production configuration
 
+RUN curl --silent --show-error https://getcomposer.org/installer | php
+RUN cp composer.phar /usr/local/bin/composer
+RUN chown ${DOCKER_USER}:root /usr/local/bin/composer
+
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY docker/php-7-4/config/php.ini /usr/local/etc/php/phpcustom.ini
-
+RUN chown -R ${DOCKER_USER}:${DOCKER_USER} /var/www/
+USER ${DOCKER_USER}
 WORKDIR /var/www/
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
