@@ -1,5 +1,5 @@
 # Docker composer version
-version: '3'
+version: '3.8'
 
 # Define network name
 networks:

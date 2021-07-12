@@ -1,5 +1,5 @@
 # Docker composer version
-version: '3'
+version: '3.8'
 
 networks:
   laravel:
@@ -46,9 +46,9 @@ services:
   #  networks:
   #    - ${FRAMEWORK}
 
-  #flutter:
-  #  build:
-  #    context: .
-  #    dockerfile: ./docker/flutter/Dockerfile
-  #  volumes: 
-  #    - ./apps_mobile:/home/developer/workspace
+  flutter:
+    build:
+      context: .
+      dockerfile: ./docker/flutter/Dockerfile
+    volumes: 
+      - ./apps_mobile:/home/developer/workspace
